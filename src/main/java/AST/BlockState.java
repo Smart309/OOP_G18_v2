@@ -1,6 +1,7 @@
 package AST;
 
 import Error.*;
+import GamePlay.Player;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -12,10 +13,10 @@ public class BlockState implements Node{
     }
 
     @Override
-    public void doPlan( Map<String, Long> bindings ) throws EvalError{
+    public void doPlan( Map<String, Long> bindings , Player player ) throws EvalError{
         stetements.forEach( plan ->{
             try{
-                plan.doPlan(bindings);
+                plan.doPlan(bindings,player);
             }catch( EvalError e ){
                 System.out.println("State Error");
             }

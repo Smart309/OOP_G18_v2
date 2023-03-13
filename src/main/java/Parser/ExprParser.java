@@ -75,7 +75,7 @@ public class ExprParser implements Parser{
         }
     }
 
-    // ActionCommand -> done | relocate | MoveCommand | AST.RegionCommand | AttackCommand
+    // ActionCommand -> done | relocate | MoveCommand | RegionCommand | AttackCommand
     private Node parseActionCommand()throws SyntaxError, LexicalError{
         if(tkz.peek("done")){
             tkz.consume();

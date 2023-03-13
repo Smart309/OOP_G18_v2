@@ -4,7 +4,6 @@ package AST;
 public class Attack implements Node{
     protected Node dir;
     private Expr amount;
-    Node expression;
     public Attack( Node dir , Expr amount){
         this.dir = dir;
         this.amount = amount;

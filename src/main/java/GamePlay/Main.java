@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 
 public class Main{
@@ -37,8 +37,7 @@ public class Main{
         }
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws LexicalError, SyntaxError, EvalError{
         Charset charset = StandardCharsets.UTF_8;
         Path configFile = Paths.get("src/configuration file.txt");
         Map<String, Long> var = new HashMap<>();
@@ -46,6 +45,7 @@ public class Main{
 
         Tokenizer tkz = null;
         Path file = Paths.get("src/construction plan.txt");
+//        Path file = Paths.get("src/construction plan.txt");
         try
         {
             String content = Files.readString(file, charset);
@@ -60,24 +60,28 @@ public class Main{
             System.out.println(e.getMessage() + " : file not found");
         }
         ExprParser plan = new ExprParser(tkz);
-        try
-        {
-            Node p = plan.parse();
-            StringBuilder s = new StringBuilder();
-            p.prettyPrint( s );
-            System.out.println(s);
-            Gameplay.Player p1 = new Gameplay.Player("player1", var, p);
-            p1.gatVar();
-            System.out.println("------------------------------------------------");
-            p1.doPlan();
-            p1.gatVar();
-            System.out.println("------------------------------------------------");
-            p1.doPlan();
-            p1.gatVar();
-        }
-        catch (LexicalError | SyntaxError | EvalError e)
-        {
-            System.out.println(e.getMessage());
-        }
+        Node p = plan.parse();
+//        StringBuilder s =new StringBuilder();
+//        p.prettyPrint( s );
+//        System.out.println(s);
+        return;
+//        try
+//        {
+
+//            StringBuilder s =new StringBuilder();
+//            p.prettyPrint( s );
+//            System.out.println(s);
+
+
+//            Territory territory = new Territory( var );
+//            Player p1 = new Player("player1", var, p,territory.getTerritory());
+//            Player p2 = new Player("player2", var, p,territory.getTerritory());
+//            GamePlay gamePlay = new GamePlay( p1,p2,territory.getTerritory() );
+//            gamePlay.start();
+//        }catch (LexicalError | SyntaxError | EvalError e){
+//            System.out.println(e.getMessage());
+//        }
+
+
     }
 }

@@ -1,6 +1,7 @@
 package AST;
 
 import Error.*;
+import GamePlay.Player;
 
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public class Assignment implements Node{
     }
 
     @Override
-    public void doPlan( Map<String, Long> bindings ) throws EvalError{
+    public void doPlan( Map<String, Long> bindings , Player player ) throws EvalError{
         if( bindings.containsKey( variable ) ){
             bindings.replace( variable,number.eval( bindings ) );
         }else{
