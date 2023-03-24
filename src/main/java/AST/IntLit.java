@@ -1,5 +1,7 @@
 package AST;
 
+import GamePlay.Player;
+
 import java.util.Map;
 
 public class IntLit implements Expr{
@@ -8,7 +10,7 @@ public class IntLit implements Expr{
         this.val = val;
     }
     @Override
-    public Long eval( Map<String, Long> bindings ) {
+    public Long eval( Map<String, Long> bindings , Player player ) {
         return val;
     }
     @Override

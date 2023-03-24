@@ -1,6 +1,7 @@
 package AST;
 
 import Error.*;
+import GamePlay.Player;
 
 import java.util.Map;
 
@@ -14,9 +15,9 @@ public class BinaryArithExpr implements Expr{
     }
 
     @Override
-    public Long eval( Map<String, Long> bindings ) throws EvalError{
-        double lv = left.eval(bindings);
-        double rv = right.eval(bindings);
+    public Long eval( Map<String, Long> bindings , Player player ) throws EvalError{
+        double lv = left.eval(bindings,player);
+        double rv = right.eval(bindings,player);
         if(op.equals( "+" ))return (long) (lv + rv);
         if( op.equals( "-" ) )return (long) (lv - rv);
         if(op.equals( "*" ))return (long) (lv * rv);

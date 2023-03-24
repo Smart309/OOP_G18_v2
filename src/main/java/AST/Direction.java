@@ -1,12 +1,14 @@
 package AST;
 
+import GamePlay.Player;
+
 import java.util.Map;
 
 public enum Direction implements Expr{
     up,down,upleft,upright,downleft,downright;
 
     @Override
-    public Long eval( Map<String, Long> bindings ) {
+    public Long eval( Map<String, Long> bindings , Player player ) {
         switch (this)
         {
             case up -> {return 1L;}

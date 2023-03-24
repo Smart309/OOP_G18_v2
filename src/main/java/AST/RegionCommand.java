@@ -2,6 +2,7 @@ package AST;
 
 import Error.*;
 import GamePlay.Player;
+import GamePlay.Region;
 
 import java.util.Map;
 
@@ -14,11 +15,11 @@ public class RegionCommand implements Node{
     }
 
     @Override
-    public void doPlan( Map<String, Long> bindings, Player player ) throws EvalError{
+    public void evaluate( Map<String, Long> bindings, Player player ) throws EvalError{
         if( dep_with.equals( "collect" ) ){
-            player.collect( amount.eval( bindings ) );
+            player.collect( amount.eval( bindings,player ) );
         }else if( dep_with.equals( "invest" ) ){
-            player.invest( amount.eval( bindings ) );
+            player.invest( amount.eval( bindings,player ) );
         }
     }
 

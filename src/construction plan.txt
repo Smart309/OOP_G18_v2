@@ -1,11 +1,12 @@
 t = t + 1  # keeping track of the turn number
 m = 0  # number of random moves
+cost = 0
 while (deposit) { # still our region
-  if (deposit - 100)
+  if (deposit - 1000)
   then collect (deposit / 4)  # collect 1/4 of available deposit
-  else if (budget - 25) then invest 25
+  else if (budget-22) then invest 25
   else {}
-  if (budget - 100) then {} else done  # too poor to do anything else
+  if (budget - 10) then {} else done  # too poor to do anything else
   opponentLoc = opponent
   if (opponentLoc / 10 - 1)
   then  # opponent afar

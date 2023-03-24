@@ -2,6 +2,7 @@ package AST;
 
 import Error.EvalError;
 import GamePlay.Player;
+import GamePlay.Region;
 
 import java.util.Map;
 
@@ -14,9 +15,9 @@ public class WhileState implements Node{
     }
 
     @Override
-    public void doPlan( Map<String, Long> bindings , Player player ) throws EvalError{
-        for( int i = 0; i < 10000 && condition.eval( bindings )>0; i++ ){
-            stateInWhile.doPlan( bindings ,player);
+    public void evaluate( Map<String, Long> bindings , Player player ) throws EvalError{
+        for( int i = 0; i < 10000 && condition.eval( bindings ,player)>0; i++ ){
+            stateInWhile.evaluate( bindings ,player);
         }
     }
     @Override

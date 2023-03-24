@@ -2,7 +2,7 @@ t = t + 1  # keeping track of the turn number
 m = 0  # number of random moves
 opponentLoc = 11
 while (deposit) { # still our region
-  opponentLoc = 12
+  opponentLoc = 60
     if (1)
     then  # opponent afar
       if (opponentLoc % 10 - 5) then move downleft

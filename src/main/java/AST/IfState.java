@@ -2,6 +2,7 @@ package AST;
 
 import Error.*;
 import GamePlay.Player;
+import GamePlay.Region;
 
 import java.util.Map;
 
@@ -15,11 +16,11 @@ public class IfState implements Node{
     }
 
     @Override
-    public void doPlan( Map<String, Long> bindings , Player player ) throws EvalError{
-        if(condition.eval( bindings ) > 0){
-            thenStatement.doPlan( bindings,player );
+    public void evaluate( Map<String, Long> bindings , Player player ) throws EvalError{
+        if(condition.eval( bindings ,player) > 0){
+            thenStatement.evaluate( bindings,player );
         }else {
-            elseStatement.doPlan( bindings,player );
+            elseStatement.evaluate( bindings,player );
         }
     }
 
