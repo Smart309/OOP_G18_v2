@@ -52,16 +52,12 @@ public class Region {
     public boolean isCityCenter(){
         return this.isCityCenter;
     }
-    public void setCityCenter(Player player)
-    {
-        player.addMyRegin( this );
+    public void setCityCenter(Player player){
         playerOwner = player;
         isCityCenter = true;
     }
 
-    public void changeCityCenter()
-    {
-        playerOwner = null;
+    public void changeCityCenter(){
         isCityCenter = false;
     }
     public void updateInterestPct()

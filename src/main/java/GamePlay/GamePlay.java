@@ -38,8 +38,10 @@ public class GamePlay{
         int rowP2 = p2.getCityCenterRow();
         int colP2 = p2.getCityCenterCol();
         territory[rowP1][colP1].setCityCenter( p1 );
+        p1.addMyRegin( territory[rowP1][colP1] );
         territory[rowP1][colP1].updateDeposit( Configuration.getInit_center_dep() );
         territory[rowP2][colP2].setCityCenter( p2 );
+        p2.addMyRegin( territory[rowP2][colP2] );
         territory[rowP2][colP2].updateDeposit( Configuration.getInit_center_dep() );
 
         this.currentTurn = p1;
@@ -48,11 +50,6 @@ public class GamePlay{
         return territory[m][n];
     }
     public void doPlan() throws EvalError{
-//        if( currentTurn.equals( p1 ) ){
-//            System.out.print("Action "+ p1.getName() +" :");
-//        }else{
-//            System.out.print("Action "+ p2.getName() +" :");
-//        }
         if( currentTurn.equals( p1 ) ){
             p1.doPlan();
         }else{
@@ -60,9 +57,17 @@ public class GamePlay{
         }
 
         if( currentTurn.equals( p1 ) ){
-            currentTurn = p2;
+            if( currentTurn.checkEndTurn() ){
+                currentTurn = p2;
+            }else{
+                currentTurn = p1;
+            }
         }else{
-            currentTurn = p1;
+            if( currentTurn.checkEndTurn() ){
+                currentTurn = p1;
+            }else{
+                currentTurn = p2;
+            }
         }
 
         if( p1.checkLose() ){

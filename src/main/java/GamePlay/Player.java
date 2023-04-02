@@ -23,9 +23,9 @@ public class Player {
     private boolean endTurn ;
     private boolean loser;
     private int turn = 1;
-    private String plan ;
+    private String plan,p ;
     private Path path = Paths.get("src/configuration file.txt");
-    private Path pathPlan = Paths.get( "src/construction plan.txt");
+    private Path pathPlan ;
     private Charset charset = StandardCharsets.UTF_8;
     private Scanner s = new Scanner( System.in );
     private int numberPlayer ;
@@ -41,6 +41,9 @@ public class Player {
         this.name = s.nextLine();
         this.playerValue = new HashMap<>();
         budget = Configuration.getInit_budget();
+        System.out.print("Path Construction Plan Of " + this.name + " : ");
+        p = s.nextLine();
+        pathPlan = Paths.get(p);//"src/construction plan.txt"
         try{
             this.plan = Files.readString( pathPlan,charset );
         }catch( IOException e ){
@@ -58,7 +61,9 @@ public class Player {
         endTurn = false;
         Node p = null;
         try{
-            Tokenizer tkz = new ExprTokenizer( this.plan );
+//            System.out.print("Action Of " + this.name + " : " );
+//            plan = s.nextLine();
+            Tokenizer tkz = new ExprTokenizer( plan );
             ExprParser parser = new ExprParser( tkz );
             p = parser.parse();
         }catch( LexicalError e ){
@@ -91,6 +96,9 @@ public class Player {
                     System.out.println("___________________________________________________________");
                 }
                 if( curRegion.getDeposit() == 0 ){
+                    System.out.println("___________________________________________________________");
+                    System.out.println(name + " :" + " Lose Region (" + (curRegion.getRowOfRegion()+1) + "," + (curRegion.getColOfRegion()+1) + ")");
+                    System.out.println("___________________________________________________________");
                     myRegion.remove( curRegion );
                     curRegion.removePlayerOwner();
                 }
@@ -119,6 +127,9 @@ public class Player {
                 }
                 if(curRegion.getPlayerOwner() == null)
                 {
+                    System.out.println("___________________________________________________________");
+                    System.out.println(name + " :" + " Get Region (" + (curRegion.getRowOfRegion()+1) + "," + (curRegion.getColOfRegion()+1) + ")");
+                    System.out.println("___________________________________________________________");
                     myRegion.add( curRegion );
                     curRegion.setPlayerOwner(this);
                 }
@@ -168,57 +179,63 @@ public class Player {
                 Region cityCenterOld = GamePlay.getRegion( cityCenter[0], cityCenter[1] );
                 Region cur = GamePlay.getRegion( cityCrew[0], cityCrew[1] );
                 int[] next;
-                if( cur.getPlayerOwner().equals( this ) ){
-                    int dist = 0;
-                    while( ( cur.getRowOfRegion() != cityCenterOld.getRowOfRegion() && cur.getColOfRegion() != cityCenterOld.getColOfRegion() ) || cur.getRowOfRegion() != cityCenterOld.getRowOfRegion() || cur.getColOfRegion() != cityCenterOld.getColOfRegion() ){
-                        if(cityCenterOld.getColOfRegion() < cur.getColOfRegion()){
-                            if(cityCenterOld.getRowOfRegion() == cur.getRowOfRegion()){
-                                cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion() );
-                                dist += cur.getColOfRegion() - cityCenterOld.getColOfRegion();
-                            }else if(cityCenterOld.getRowOfRegion() < cur.getRowOfRegion()){
-                                next = position(3, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //downright
-                                cityCenterOld = GamePlay.getRegion(next[0], next[1]);
+                if( cur.getPlayerOwner() != null ){
+                    if( cur.getPlayerOwner().equals( this ) ){
+                        int dist = 0;
+                        while( ( cur.getRowOfRegion() != cityCenterOld.getRowOfRegion() && cur.getColOfRegion() != cityCenterOld.getColOfRegion() ) || cur.getRowOfRegion() != cityCenterOld.getRowOfRegion() || cur.getColOfRegion() != cityCenterOld.getColOfRegion() ){
+                            if(cityCenterOld.getColOfRegion() < cur.getColOfRegion()){
+                                if(cityCenterOld.getRowOfRegion() == cur.getRowOfRegion()){
+                                    cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion() );
+                                    dist += cur.getColOfRegion() - cityCenterOld.getColOfRegion();
+                                }else if(cityCenterOld.getRowOfRegion() < cur.getRowOfRegion()){
+                                    next = position(3, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //downright
+                                    cityCenterOld = GamePlay.getRegion(next[0], next[1]);
+                                }else{
+                                    next = position(2, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //upright
+                                    cityCenterOld = GamePlay.getRegion(next[0], next[1]);
+                                }
+                            }else if(cityCenterOld.getColOfRegion() > cur.getColOfRegion()){
+                                if(cityCenterOld.getRowOfRegion() == cur.getRowOfRegion()){
+                                    cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion());
+                                    dist += cityCenterOld.getColOfRegion() - cur.getColOfRegion();
+                                }else if(cityCenterOld.getRowOfRegion() < cur.getRowOfRegion()){
+                                    next = position(5, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //downleft
+                                    cityCenterOld = GamePlay.getRegion(next[0], next[1]);
+                                }else{
+                                    next = position(6, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //upleft
+                                    cityCenterOld = GamePlay.getRegion(next[0], next[1]);
+                                }
                             }else{
-                                next = position(2, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //upright
-                                cityCenterOld = GamePlay.getRegion(next[0], next[1]);
+                                if(cityCenterOld.getRowOfRegion() < cur.getRowOfRegion()){
+                                    cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion());
+                                    dist += cur.getRowOfRegion() - cityCenterOld.getRowOfRegion();
+                                }else{
+                                    cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion());
+                                    dist += cityCenterOld.getRowOfRegion() - cur.getRowOfRegion();
+                                }
                             }
-                        }else if(cityCenterOld.getColOfRegion() > cur.getColOfRegion()){
-                            if(cityCenterOld.getRowOfRegion() == cur.getRowOfRegion()){
-                                cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion());
-                                dist += cityCenterOld.getColOfRegion() - cur.getColOfRegion();
-                            }else if(cityCenterOld.getRowOfRegion() < cur.getRowOfRegion()){
-                                next = position(5, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //downleft
-                                cityCenterOld = GamePlay.getRegion(next[0], next[1]);
-                            }else{
-                                next = position(6, cityCenterOld.getRowOfRegion(), cityCenterOld.getColOfRegion()); //upleft
-                                cityCenterOld = GamePlay.getRegion(next[0], next[1]);
-                            }
-                        }else{
-                            if(cityCenterOld.getRowOfRegion() < cur.getRowOfRegion()){
-                                cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion());
-                                dist += cur.getRowOfRegion() - cityCenterOld.getRowOfRegion();
-                            }else{
-                                cityCenterOld = GamePlay.getRegion(cur.getRowOfRegion(), cur.getColOfRegion());
-                                dist += cityCenterOld.getRowOfRegion() - cur.getRowOfRegion();
-                            }
+                            dist++;
                         }
-                        dist++;
+                        int cost = 5*dist + 10;
+                        System.out.println("___________________________________________________________");
+                        System.out.print(name + " :" + " Relocate City Center From (" +(cityCenter[0]+1)+","+(cityCenter[1]+1)+") To ("+(cityCrew[0]+1)+","+(cityCrew[1]+1)+")");
+                        System.out.print(" Pay " + cost +" Unit. -->");
+                        if(budget >= cost)
+                        {
+                            budget -= cost;
+                            GamePlay.getRegion(cityCenter[0], cityCenter[1]).changeCityCenter();
+                            cur.setCityCenter(this);
+                            cityCenter[0] = cityCrew[0];
+                            cityCenter[1] = cityCrew[1];
+                            System.out.println("Successfully Relocate.");
+                        }else{
+                            System.out.println("Failed To Relocate.");
+                        }
+                        System.out.println("___________________________________________________________");
                     }
-                    int cost = 5*dist + 10;
+                }else{
                     System.out.println("___________________________________________________________");
-                    System.out.print(name + " :" + " Relocate City Center From (" +(cityCenter[0]+1)+","+(cityCenter[1]+1)+") To ("+(cityCrew[0]+1)+","+(cityCrew[1]+1)+")");
-                    System.out.print(" Pay " + cost +" Unit. -->");
-                    if(budget >= cost)
-                    {
-                        budget -= cost;
-                        GamePlay.getRegion(cityCenter[0], cityCenter[1]).changeCityCenter();
-                        cur.setCityCenter(this);
-                        cityCenter[0] = cityCrew[0];
-                        cityCenter[1] = cityCrew[1];
-                        System.out.println("Successfully Relocate.");
-                    }else{
-                        System.out.println("Failed To Relocate.");
-                    }
+                    System.out.println(name + " :" + " You don't own region (" + (cur.getRowOfRegion()+1) + "," + (cur.getColOfRegion()+1) + ") yet.");
                     System.out.println("___________________________________________________________");
                 }
                 endTurn = true;
@@ -239,7 +256,8 @@ public class Player {
                 System.out.println(name + " :" + " NearBy Is " + (100*dist + digitsDeposit));
                 System.out.println("___________________________________________________________");
                 return 100*dist + digitsDeposit;
-            }if(opPosition[0] > 0 && opPosition[0] < Configuration.getM()-1 && opPosition[1] > 0 && opPosition[1] < Configuration.getN()-1){
+            }
+            if(opPosition[0] > 0 && opPosition[0] < Configuration.getM()-1 && opPosition[1] > 0 && opPosition[1] < Configuration.getN()-1){
                 opPosition = position(dir, opPosition[0], opPosition[1]);
             }
         }
@@ -329,7 +347,7 @@ public class Player {
                         ShowDir = " Can't Move Down";
                     }
                 }else if( dir == 5 ){
-                    if(cityCrew[1] > 0 && (cityCrew[0] < rows || cityCrew[1] % 2 == 0)){
+                    if(cityCrew[1] > 0 && (cityCrew[0] < rows || cityCrew[1] % 2 != 0)){
                         ShowDir = " Move Down Left";
                     }else{
                         ShowDir = " Can't Move Down Left";
@@ -349,6 +367,10 @@ public class Player {
                 if(owner == null || owner.equals( this )){
                     cityCrew[0] = moveTo[0];
                     cityCrew[1] = moveTo[1];
+                }else{
+                    System.out.println("___________________________________________________________");
+                    System.out.println("You Do Not Have Access To The Region.");
+                    System.out.println("___________________________________________________________");
                 }
                 endTurn = true;
             }else{
@@ -444,5 +466,8 @@ public class Player {
     }
     public void removeMyRegin(Region x){
         this.myRegion.remove( x );
+    }
+    public boolean checkEndTurn(){
+        return endTurn;
     }
 }
